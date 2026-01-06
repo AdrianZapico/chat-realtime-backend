@@ -17,13 +17,16 @@ router.get("/messages/:roomId", protect, getMessagesByRoom);
 router.post("/messages", protect, async (req, res) => {
     const { roomId, content } = req.body;
 
-    const message = await Message.create({
+    let message = await Message.create({
         roomId,
         content,
         sender: req.user,
     });
 
+    message = await message.populate("sender", "name email");
+
     res.status(201).json(message);
 });
+
 
 export default router;

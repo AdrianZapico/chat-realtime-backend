@@ -2,19 +2,12 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
     {
-        roomId: {
-            type: String,
-            required: true,
-        },
+        roomId: String,
+        content: String,
         sender: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
-        },
-        content: {
-            type: String,
-            required: true,
-            trim: true,
         },
     },
     { timestamps: true }

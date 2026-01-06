@@ -1,9 +1,9 @@
 import Message from "../models/Message.js";
 
 export const getMessagesByRoom = async (req, res) => {
-    try {
-        const { roomId } = req.params;
+    const { roomId } = req.params;
 
+    try {
         const messages = await Message.find({ roomId })
             .populate("sender", "name email")
             .sort({ createdAt: 1 });
