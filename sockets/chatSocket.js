@@ -16,18 +16,16 @@ const chatSocket = (io) => {
                     content: message,
                 });
 
-                io.to(roomId).emit("receiveMessage", {
-                    id: newMessage._id,
-                    roomId,
-                    sender: socket.userId,
-                    content: newMessage.content,
-                    createdAt: newMessage.createdAt,
-                });
+                const populatedMessage = await newMessage.populate(
+                    "sender",
+                    "_id name"
+                );
+
+                io.to(roomId).emit("receiveMessage", populatedMessage);
             } catch (error) {
                 console.error("Erro ao salvar mensagem:", error.message);
             }
         });
-
         socket.on("disconnect", () => {
             console.log("Socket desconectado:", socket.userId);
         });
