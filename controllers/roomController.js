@@ -19,3 +19,16 @@ export const createRoom = async (req, res) => {
         res.status(500).json({ message: "Erro ao criar sala" });
     }
 };
+
+export const getMyRooms = async (req, res) => {
+    try {
+        const rooms = await Room.find({
+            createdBy: req.user,
+        }).sort({ createdAt: -1 });
+
+        res.json(rooms);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao buscar salas" });
+    }
+};
