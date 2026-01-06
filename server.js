@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import socketAuth from "./middlewares/socketAuth.js";
 import chatSocket from "./sockets/chatSocket.js";
+import roomRoutes from "./routes/roomRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -31,6 +32,8 @@ app.use(express.json());
 /* rotas */
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/rooms", roomRoutes);
+
 
 /* servidor HTTP */
 const server = http.createServer(app);
