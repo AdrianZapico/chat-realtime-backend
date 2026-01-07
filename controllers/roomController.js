@@ -74,3 +74,33 @@ export const deleteRoom = async (req, res) => {
         return res.status(500).json({ message: "Erro interno do servidor" });
     }
 };
+
+export const updateRoom = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({ message: "Nome inválido" });
+        }
+
+        const room = await Room.findById(id);
+
+        if (!room) {
+            return res.status(404).json({ message: "Sala não encontrada" });
+        }
+
+        // 🔐 permissão
+        if (room.createdBy.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Sem permissão" });
+        }
+
+        room.name = name.trim();
+        await room.save();
+
+        res.json(room);
+    } catch (error) {
+        console.error("Erro ao editar sala:", error);
+        res.status(500).json({ message: "Erro ao editar sala" });
+    }
+};
