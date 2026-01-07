@@ -6,10 +6,29 @@ const chatSocket = (io) => {
 
         socket.on("joinRoom", (roomId) => {
             socket.join(roomId);
+
+            const users = Array.from(
+                io.sockets.adapter.rooms.get(roomId) || []
+            );
+
+            io.to(roomId).emit("roomUsers", users.length);
         });
 
         socket.on("leaveRoom", (roomId) => {
             socket.leave(roomId);
+        });
+
+        socket.on("typing", ({ roomId }) => {
+            socket.to(roomId).emit("userTyping", {
+                userId: socket.userId,
+                name: socket.userName,
+            });
+        });
+
+        socket.on("stopTyping", ({ roomId }) => {
+            socket.to(roomId).emit("userStopTyping", {
+                userId: socket.userId,
+            });
         });
 
 
