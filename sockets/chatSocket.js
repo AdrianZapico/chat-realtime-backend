@@ -8,6 +8,11 @@ const chatSocket = (io) => {
             socket.join(roomId);
         });
 
+        socket.on("leaveRoom", (roomId) => {
+            socket.leave(roomId);
+        });
+
+
         socket.on("sendMessage", async ({ roomId, message }) => {
             try {
                 const newMessage = await Message.create({
